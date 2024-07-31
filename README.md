@@ -18,13 +18,13 @@ To use this module, you should have Terraform installed and configured for AWS. 
 
 # Examples
 
-# Example: 
+# Example:
 
 ```hcl
 # Create EC2 instances
 module "ec2" {
   source      = "cypik/ec2/aws"
-  version     = "1.0.1"
+  version     = "1.0.0"
   name        = "ec2"
   environment = local.environment
 
