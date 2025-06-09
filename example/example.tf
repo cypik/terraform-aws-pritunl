@@ -86,7 +86,7 @@ module "ec2" {
   instance_type  = "t2.micro"
 
   #Keypair
-  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII8fbmzTPh3Ihrxrw6C39wu7CxR9j/l2zDWJixH5uiI0 himanshu@himanshu"
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDIxH5uiI0 himanshu@himanshu"
 
   #Networking
   subnet_ids = tolist(module.public_subnets.public_subnet_id)

@@ -171,6 +171,7 @@ variable "ebs_volume_enabled" {
   default     = false
   description = "Flag to control the ebs creation."
 }
+
 variable "instance_profile_enabled" {
   type        = bool
   default     = true

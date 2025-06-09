@@ -16,7 +16,6 @@ output "az" {
 output "public_ip" {
   value       = concat(aws_eip.default[*].public_ip, aws_instance.default[*].public_ip, [""])
   description = "Public IP of instance (or EIP)."
-
 }
 
 output "private_ip" {
