@@ -28,6 +28,12 @@ variable "label_order" {
   description = "Label order, e.g. `name`,`application`."
 }
 
+variable "managedby" {
+  type        = string
+  default     = "info@cypik.com"
+  description = "ManagedBy, eg 'info@cypik.com'"
+}
+
 variable "delimiter" {
   type        = string
   default     = "-"
@@ -38,12 +44,6 @@ variable "tags" {
   type        = map(any)
   default     = {}
   description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
-}
-
-variable "managedby" {
-  type        = string
-  default     = "cypik"
-  description = "ManagedBy, eg 'cypik'."
 }
 
 variable "enable" {

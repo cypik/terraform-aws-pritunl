@@ -9,7 +9,7 @@ locals {
 
 module "vpc" {
   source      = "cypik/vpc/aws"
-  version     = "1.0.1"
+  version     = "1.0.2"
   name        = "app"
   environment = local.environment
   label_order = local.label_order
@@ -18,12 +18,12 @@ module "vpc" {
 
 module "public_subnets" {
   source             = "cypik/subnet/aws"
-  version            = "1.0.1"
+  version            = "1.0.3"
   name               = "public-subnet"
   environment        = local.environment
   label_order        = local.label_order
   availability_zones = ["eu-west-1b", "eu-west-1c"]
-  vpc_id             = module.vpc.id
+  vpc_id             = module.vpc.vpc_id
   cidr_block         = module.vpc.vpc_cidr_block
   type               = "public"
   igw_id             = module.vpc.igw_id
@@ -32,7 +32,7 @@ module "public_subnets" {
 
 module "iam-role" {
   source             = "cypik/iam-role/aws"
-  version            = "1.0.1"
+  version            = "1.0.2"
   name               = "iam-role"
   environment        = local.environment
   label_order        = local.label_order
@@ -69,7 +69,7 @@ module "ec2" {
   source            = "./../"
   name              = "ec2"
   environment       = local.environment
-  vpc_id            = module.vpc.id
+  vpc_id            = module.vpc.vpc_id
   ssh_allowed_ip    = ["0.0.0.0/0"]
   ssh_allowed_ports = [22]
 
@@ -82,11 +82,11 @@ module "ec2" {
 
   #Instance
   instance_count = 1
-  ami            = "ami-0dd271720c1ba44f"
+  ami            = "ami-028727bd3039c5a1f"
   instance_type  = "t2.micro"
 
   #Keypair
-  public_key = "tmyQFspPKmaUW7DBMO+++3op32ybCEY+GeemdI6Zd28ZjgQUB1k= baldev@baldev"
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII8fbmzTPh3Ihrxrw6C39wu7CxR9j/l2zDWJixH5uiI0 himanshu@himanshu"
 
   #Networking
   subnet_ids = tolist(module.public_subnets.public_subnet_id)

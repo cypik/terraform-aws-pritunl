@@ -9,9 +9,13 @@ sudo apt-get install pritunl -y
 sudo systemctl start pritunl
 sudo systemctl enable pritunl
 
-curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc%7Csudo gpg --dearmor -o /etc/apt/trusted.gpg.d/mongodb-6.gpg
-echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-sudo apt update -y
-sudo apt install mongodb-org -y
+curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/mongodb-6.gpg
+echo "deb [ arch=amd64,arm64 signed-by=/etc/apt/trusted.gpg.d/mongodb-6.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+
 sudo systemctl start mongod.service
 sudo systemctl enable mongo
+sudo systemctl status mongod
+sudo systemctl start mongod
+sudo systemctl enable mongod
