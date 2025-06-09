@@ -22,9 +22,9 @@ To use this module, you should have Terraform installed and configured for AWS. 
 # Create EC2-Pritunl instances
 
 module "ec2" {
-  source      = "cypik/ec2/aws"
+  source      = "cypik/pritunl/aws"
   version     = "1.0.0"
-  name        = "ec2"
+  name        = "pritunl"
   environment = local.environment
 
   # Define security group and instance details
