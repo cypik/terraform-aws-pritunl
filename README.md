@@ -73,8 +73,6 @@ module "ec2" {
 
 This example demonstrates how to create various AWS resources using the provided modules. Adjust the input values to suit your specific requirements.
 
-```
-
 ## Examples
 For detailed examples on how to use this module, please refer to the [Examples](https://github.com/cypik/terraform-aws-ec2/tree/master/example) directory within this repository.
 
