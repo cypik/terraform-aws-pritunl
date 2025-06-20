@@ -60,6 +60,7 @@ resource "aws_security_group_rule" "egress_ipv4" {
   cidr_blocks       = var.egress_ipv4_cidr_block
   security_group_id = join("", aws_security_group.default[*].id)
 }
+
 #tfsec:ignore:aws-ec2-no-public-egress-sgr
 resource "aws_security_group_rule" "egress_ipv6" {
   count             = var.enable && var.enable_security_group && length(var.sg_ids) < 1 && var.is_external == false && var.egress_rule ? 1 : 0
@@ -71,6 +72,7 @@ resource "aws_security_group_rule" "egress_ipv6" {
   ipv6_cidr_blocks  = var.egress_ipv6_cidr_block
   security_group_id = join("", aws_security_group.default[*].id)
 }
+
 #tfsec:ignore:aws-ec2-no-public-ingress-sgr
 resource "aws_security_group_rule" "ssh_ingress" {
   count             = var.enable && length(var.ssh_allowed_ip) > 0 && length(var.sg_ids) < 1 ? length(compact(var.ssh_allowed_ports)) : 0
@@ -82,6 +84,7 @@ resource "aws_security_group_rule" "ssh_ingress" {
   cidr_blocks       = var.ssh_allowed_ip
   security_group_id = join("", aws_security_group.default[*].id)
 }
+
 #tfsec:ignore:aws-ec2-no-public-ingress-sgr
 resource "aws_security_group_rule" "ingress" {
   for_each = var.allow_ingress_port_ip
@@ -144,8 +147,6 @@ resource "aws_instance" "default" {
   placement_group                      = var.placement_group
   tenancy                              = var.tenancy
   host_id                              = var.host_id
-  cpu_core_count                       = var.cpu_core_count
-  cpu_threads_per_core                 = var.cpu_threads_per_core
   user_data                            = var.user_data
   user_data_base64                     = var.user_data_base64
   user_data_replace_on_change          = var.user_data_replace_on_change
@@ -276,9 +277,6 @@ resource "aws_instance" "default" {
   )
 
   lifecycle {
-    # Due to several known issues in Terraform AWS provider related to arguments of aws_instance:
-    # (eg, https://github.com/terraform-providers/terraform-provider-aws/issues/2036)
-    # we have to ignore changes in the following arguments
     ignore_changes = [
       private_ip,
     ]
@@ -342,7 +340,6 @@ resource "aws_spot_instance_request" "default" {
   wait_for_fulfillment                 = var.spot_wait_for_fulfillment
   spot_type                            = var.spot_type
   launch_group                         = var.spot_launch_group
-  block_duration_minutes               = var.spot_block_duration_minutes
   instance_interruption_behavior       = var.spot_instance_interruption_behavior
   valid_until                          = var.spot_valid_until
   valid_from                           = var.spot_valid_from
@@ -359,8 +356,6 @@ resource "aws_spot_instance_request" "default" {
   placement_group                      = var.placement_group
   tenancy                              = var.tenancy
   host_id                              = var.host_id
-  cpu_core_count                       = var.cpu_core_count
-  cpu_threads_per_core                 = var.cpu_threads_per_core
   user_data                            = var.user_data
   user_data_base64                     = var.user_data_base64
   user_data_replace_on_change          = var.user_data_replace_on_change
@@ -493,9 +488,6 @@ resource "aws_spot_instance_request" "default" {
   )
 
   lifecycle {
-    # Due to several known issues in Terraform AWS provider related to arguments of aws_instance:
-    # (eg, https://github.com/terraform-providers/terraform-provider-aws/issues/2036)
-    # we have to ignore changes in the following arguments
     ignore_changes = [
       private_ip,
     ]
