@@ -222,12 +222,6 @@ variable "host_id" {
   description = "The Id of a dedicated host that the instance will be assigned to. Use when an instance is to be launched on a specific dedicated host."
 }
 
-variable "cpu_core_count" {
-  type        = string
-  default     = null
-  description = "Sets the number of CPU cores for an instance."
-}
-
 variable "iam_instance_profile" {
   type        = string
   default     = ""
@@ -526,12 +520,6 @@ variable "spot_launch_group" {
   description = "A launch group is a group of spot instances that launch together and terminate together. If left empty instances are launched and terminated individually"
 }
 
-variable "spot_block_duration_minutes" {
-  type        = number
-  default     = null
-  description = "The required duration for the Spot instances, in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360)"
-}
-
 variable "spot_instance_interruption_behavior" {
   type        = string
   default     = null
@@ -548,12 +536,6 @@ variable "spot_valid_from" {
   type        = string
   default     = null
   description = "The start date and time of the request, in UTC RFC3339 format(for example, YYYY-MM-DDTHH:MM:SSZ)"
-}
-
-variable "cpu_threads_per_core" {
-  description = "Sets the number of CPU threads per core for an instance (has no effect unless cpu_core_count is also set)"
-  type        = number
-  default     = null
 }
 
 variable "user_data_replace_on_change" {

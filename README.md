@@ -21,52 +21,54 @@ To use this module, you should have Terraform installed and configured for AWS. 
 ```hcl
 # Create EC2-Pritunl instances
 
-module "ec2" {
-  source      = "cypik/pritunl/aws"
-  version     = "1.0.0"
-  name        = "pritunl"
-  environment = local.environment
-
-  # Define security group and instance details
-  vpc_id            = module.vpc.id
+module "pritunl" {
+  source            = "cypik/pritunl/aws"
+  version           = "1.0.0"
+  name              = "pritunl"
+  environment       = local.environment
+  vpc_id            = module.vpc.vpc_id
   ssh_allowed_ip    = ["0.0.0.0/0"]
   ssh_allowed_ports = [22]
 
-  ##allow ingress port and ip
+  ###allow ingress port and ip
   allow_ingress_port_ip = {
     "80"   = "0.0.0.0/0"
     "443"  = "0.0.0.0/0"
     "1149" = "0.0.0.0/0"
   }
-  instance_count    = 1
-  ami               = "ami-028727bd3039c5a1f"
-  instance_type     = "t2.micro"
-  public_key        = "ssh-rsa AAxxxxxxxxxxxxxxxxuuujVlfxvN2mrkV3363ftc= baldev@baldev"
 
-  # Networking
+  #Instance
+  instance_count = 1
+  ami            = "ami-020cba7c55df1f615"
+  instance_type  = "t2.micro"
+
+  #Keypair
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAB suresh@suresh"
+
+  #Networking
   subnet_ids = tolist(module.public_subnets.public_subnet_id)
 
-  # IAM
+  #IAM
   iam_instance_profile = module.iam-role.name
 
-  # Root Volume
+  #Root Volume
   root_block_device = [
     {
-      volume_type           = "gp2"
-      volume_size           = 15
+      volume_type           = "gp3"
+      volume_size           = 16
       delete_on_termination = true
     }
   ]
 
-  # EBS Volume
+  #EBS Volume
   ebs_volume_enabled = true
-  ebs_volume_type    = "gp2"
-  ebs_volume_size    = 30
+  ebs_volume_type    = "gp3"
+  ebs_volume_size    = 32
 
-  # Tags
+  #Tags
   instance_tags = { "snapshot" = true }
+  #user data
   user_data = file("${path.module}/pritunl.sh")
-
 }
 ```
 
@@ -139,10 +141,8 @@ Replace **MIT** and **Cypik** with the appropriate license and your information.
 | <a name="input_associate_public_ip_address"></a> [associate\_public\_ip\_address](#input\_associate\_public\_ip\_address) | Associate a public IP address with the instance. | `bool` | `true` | no |
 | <a name="input_availability_zone"></a> [availability\_zone](#input\_availability\_zone) | AZ to start the instance in | `string` | `null` | no |
 | <a name="input_capacity_reservation_specification"></a> [capacity\_reservation\_specification](#input\_capacity\_reservation\_specification) | Describes an instance's Capacity Reservation targeting option | `any` | `{}` | no |
-| <a name="input_cpu_core_count"></a> [cpu\_core\_count](#input\_cpu\_core\_count) | Sets the number of CPU cores for an instance. | `string` | `null` | no |
 | <a name="input_cpu_credits"></a> [cpu\_credits](#input\_cpu\_credits) | The credit option for CPU usage. Can be `standard` or `unlimited`. T3 instances are launched as unlimited by default. T2 instances are launched as standard by default. | `string` | `"standard"` | no |
 | <a name="input_cpu_options"></a> [cpu\_options](#input\_cpu\_options) | Defines CPU options to apply to the instance at launch time. | `any` | `{}` | no |
-| <a name="input_cpu_threads_per_core"></a> [cpu\_threads\_per\_core](#input\_cpu\_threads\_per\_core) | Sets the number of CPU threads per core for an instance (has no effect unless cpu\_core\_count is also set) | `number` | `null` | no |
 | <a name="input_customer_master_key_spec"></a> [customer\_master\_key\_spec](#input\_customer\_master\_key\_spec) | Specifies whether the key contains a symmetric key or an asymmetric key pair and the encryption algorithms or signing algorithms that the key supports. Valid values: SYMMETRIC\_DEFAULT, RSA\_2048, RSA\_3072, RSA\_4096, ECC\_NIST\_P256, ECC\_NIST\_P384, ECC\_NIST\_P521, or ECC\_SECG\_P256K1. Defaults to SYMMETRIC\_DEFAULT. | `string` | `"SYMMETRIC_DEFAULT"` | no |
 | <a name="input_default_instance_enabled"></a> [default\_instance\_enabled](#input\_default\_instance\_enabled) | Flag to control the instance creation. | `bool` | `true` | no |
 | <a name="input_deletion_window_in_days"></a> [deletion\_window\_in\_days](#input\_deletion\_window\_in\_days) | Duration in days after which the key is deleted after destruction of the resource. | `number` | `7` | no |
@@ -218,7 +218,6 @@ Replace **MIT** and **Cypik** with the appropriate license and your information.
 | <a name="input_sg_ids"></a> [sg\_ids](#input\_sg\_ids) | of the security group id. | `list(any)` | `[]` | no |
 | <a name="input_sg_ingress_description"></a> [sg\_ingress\_description](#input\_sg\_ingress\_description) | Description of the ingress rule | `string` | `"Description of the ingress rule use elasticache."` | no |
 | <a name="input_source_dest_check"></a> [source\_dest\_check](#input\_source\_dest\_check) | Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs. | `bool` | `true` | no |
-| <a name="input_spot_block_duration_minutes"></a> [spot\_block\_duration\_minutes](#input\_spot\_block\_duration\_minutes) | The required duration for the Spot instances, in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360) | `number` | `null` | no |
 | <a name="input_spot_instance_count"></a> [spot\_instance\_count](#input\_spot\_instance\_count) | Number of instances to launch. | `number` | `0` | no |
 | <a name="input_spot_instance_enabled"></a> [spot\_instance\_enabled](#input\_spot\_instance\_enabled) | Flag to control the instance creation. | `bool` | `true` | no |
 | <a name="input_spot_instance_interruption_behavior"></a> [spot\_instance\_interruption\_behavior](#input\_spot\_instance\_interruption\_behavior) | Indicates Spot instance behavior when it is interrupted. Valid values are `terminate`, `stop`, or `hibernate` | `string` | `null` | no |
